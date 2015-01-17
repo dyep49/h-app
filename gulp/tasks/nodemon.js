@@ -8,6 +8,7 @@ module.exports = function() {
       script: 'app.js',
       ext: 'js ejs',
       ignore: ['public/**/*.js', 'gulp/**/*.js', 'node_modules/**/*']
+      // nodeArgs: ['debug']
     })
       .on('restart', function() {
         setTimeout(function() {
