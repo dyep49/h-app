@@ -1,12 +1,14 @@
 var mongoose = require('mongoose');
 var Price = mongoose.model('Price');
-var bitstamp = require('./bitstamp.js');
+var apiRequest = require('./api-request.js');
 var Q = require('q');
 
 module.exports = function() {
 
   function savePrice() {
-    bitstamp.getPrice().then(function(data) {
+    var bitstampEndpoint = 'https://www.bitstamp.net/api/ticker/';
+
+    apiRequest.getData(bitstampEndpoint).then(function(data) {
       var time = new Date(parseInt(data.timestamp * 1000));
       var price = parseFloat(data.last);
       
