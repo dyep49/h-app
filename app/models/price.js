@@ -15,10 +15,8 @@ PriceSchema.methods.create = function(attrs) {
   this.lastPrice = attrs.price;
   this.time = attrs.time;
 
-  console.log(this);
-
   this.save(function(err, price) {
-    err ? deferred.reject(price) : deferred.resolve();
+    err ? deferred.reject(err) : deferred.resolve(price);
   });
 
   return deferred.promise;
