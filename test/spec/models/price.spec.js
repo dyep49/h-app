@@ -2,19 +2,15 @@ var config = require('../../../config/config.js');
 var Price = require('../../../app/models/price.js');
 
 var mongoose = require('mongoose');
-mongoose.connect(config.db);
-
-
-
 
 describe('the Price model', function() {
 
   describe('#create', function() {
 
     before(function(done) {
-      mongoose.connection.db.dropDatabase(function(){
-        done();
-      });
+      if (mongoose.connection.db) return done();
+      mongoose.connect(config.db);
+      done();
     })
 
     it('creates a price object in the database', function(done) {
@@ -30,6 +26,13 @@ describe('the Price model', function() {
           priceObj.should.exist;
           done();
         });
+      });
+    });
+
+    after(function(done) {
+      mongoose.connection.db.dropDatabase(function(){
+        mongoose.connection.close();
+        done();
       });
     });
   });

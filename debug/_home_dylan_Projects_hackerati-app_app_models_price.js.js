@@ -2,24 +2,24 @@
 // Instrumentation Header
 {
     var fs = require('fs');
-    var __statement_Nw_Bf0, __expression_Nyq3qN, __block_jTLUGy;
+    var __statement_fEYaKu, __expression_yls7H5, __block_GAZEz$;
     var store = require('/home/dylan/Projects/hackerati-app/node_modules/gulp-coverage/contrib/coverage_store.js');
     
-    __statement_Nw_Bf0 = function(i) {
+    __statement_fEYaKu = function(i) {
         var fd = store.register('/home/dylan/Projects/hackerati-app/app/models/price.js');
         fs.writeSync(fd, '{"statement": {"node": ' + i + '}},\n');
     }; 
     
-    __expression_Nyq3qN = function(i) {
+    __expression_yls7H5 = function(i) {
         var fd = store.register('/home/dylan/Projects/hackerati-app/app/models/price.js');
         fs.writeSync(fd, '{"expression": {"node": ' + i + '}},\n');
     }; 
     
-    __block_jTLUGy = function(i) {
+    __block_GAZEz$ = function(i) {
         var fd = store.register('/home/dylan/Projects/hackerati-app/app/models/price.js');
         fs.writeSync(fd, '{"block": ' + i + '},\n');
     }; 
-    __intro_SIdJlV = function(id, obj) {
+    __intro_IYMFWl = function(id, obj) {
         // console.log('__intro: ', id, ', obj.__instrumented_miss: ', obj.__instrumented_miss, ', obj.length: ', obj.length);
         (typeof obj === 'object' || typeof obj === 'function') &&
             Object.defineProperty && Object.defineProperty(obj, '__instrumented_miss', {enumerable: false, writable: true});
@@ -39,7 +39,7 @@
             obj.__instrumented_miss[id] !== undefined &&
             'number' === typeof obj.length;
     }
-    __extro_kPIK$3 = function(id, obj) {
+    __extro_B8q4jC = function(id, obj) {
         var fd = store.register('/home/dylan/Projects/hackerati-app/app/models/price.js');
         // console.log('__extro: ', id, ', obj.__instrumented_miss: ', obj.__instrumented_miss, ', obj.length: ', obj.length);
         if ('undefined' !== typeof obj && null !== obj && 'undefined' !== typeof obj.__instrumented_miss) {
@@ -61,58 +61,58 @@
 
 // Instrumented Code
 {
-    __statement_Nw_Bf0(0);
+    __statement_fEYaKu(0);
     'use strict';
 }
 {
-    __statement_Nw_Bf0(1);
-    var mongoose = (__expression_Nyq3qN(2), require('mongoose'));
+    __statement_fEYaKu(1);
+    var mongoose = (__expression_yls7H5(2), require('mongoose'));
 }
 {
-    __statement_Nw_Bf0(3);
+    __statement_fEYaKu(3);
     var Schema = mongoose.Schema;
 }
 {
-    __statement_Nw_Bf0(4);
-    var Q = (__expression_Nyq3qN(5), require('q'));
+    __statement_fEYaKu(4);
+    var Q = (__expression_yls7H5(5), require('q'));
 }
 {
-    __statement_Nw_Bf0(6);
+    __statement_fEYaKu(6);
     var PriceSchema = new Schema({
             time: Date,
             lastPrice: Number
         });
 }
 {
-    __statement_Nw_Bf0(7);
+    __statement_fEYaKu(7);
     PriceSchema.methods.create = function (attrs) {
-        __block_jTLUGy(0);
+        __block_GAZEz$(0);
         {
-            __statement_Nw_Bf0(8);
-            var deferred = __extro_kPIK$3(9, __intro_SIdJlV(9, Q).defer());
+            __statement_fEYaKu(8);
+            var deferred = __extro_B8q4jC(9, __intro_IYMFWl(9, Q).defer());
         }
         {
-            __statement_Nw_Bf0(10);
+            __statement_fEYaKu(10);
             this.lastPrice = attrs.price;
         }
         {
-            __statement_Nw_Bf0(11);
+            __statement_fEYaKu(11);
             this.time = attrs.time;
         }
         {
-            __statement_Nw_Bf0(12);
-            __extro_kPIK$3(13, __intro_SIdJlV(13, this).save(function (err, price) {
-                __block_jTLUGy(1);
+            __statement_fEYaKu(12);
+            __extro_B8q4jC(13, __intro_IYMFWl(13, this).save(function (err, price) {
+                __block_GAZEz$(1);
                 {
-                    __statement_Nw_Bf0(14);
-                    (__expression_Nyq3qN(17), err) ? (__expression_Nyq3qN(15), __extro_kPIK$3(18, __intro_SIdJlV(18, deferred).reject(err))) : (__expression_Nyq3qN(16), __extro_kPIK$3(19, __intro_SIdJlV(19, deferred).resolve(price)));
+                    __statement_fEYaKu(14);
+                    (__expression_yls7H5(17), err) ? (__expression_yls7H5(15), __extro_B8q4jC(18, __intro_IYMFWl(18, deferred).reject(err))) : (__expression_yls7H5(16), __extro_B8q4jC(19, __intro_IYMFWl(19, deferred).resolve(price)));
                 }
             }));
         }
-        return __expression_Nyq3qN(20), deferred.promise;
+        return __expression_yls7H5(20), deferred.promise;
     };
 }
 {
-    __statement_Nw_Bf0(21);
-    module.exports = __extro_kPIK$3(22, __intro_SIdJlV(22, mongoose).model('Price', PriceSchema));
+    __statement_fEYaKu(21);
+    module.exports = __extro_B8q4jC(22, __intro_IYMFWl(22, mongoose).model('Price', PriceSchema));
 }
