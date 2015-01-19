@@ -2,6 +2,7 @@ var express = require('express');
 var config = require('./config/config');
 var mongoose = require('mongoose');
 var fs = require('fs');
+var collectData = require('./libs/collect-data.js');
 
 var app = express();
 
@@ -56,4 +57,6 @@ require('./config/express')(app, config);
 
 
 //Start collecting data
-require('./libs/collect-data.js')();
+setInterval(function() {
+    collectData()
+}, 30000)

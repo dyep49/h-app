@@ -4,9 +4,14 @@ var cover = require('gulp-coverage');
 
 module.exports = function() {
   gulp.task('test', function() {
-    return gulp.src(['./test/spec/**/*.js'], {read: false})
+    return gulp.src(['./test/spec/**/*.js'], {
+      read: false,
+      globals: {
+        COMMON_MODULE: require('./../../test/spec_helper.js')()
+      }
+    })
       .pipe(cover.instrument({
-          pattern: ['./libs/**/*.js'],
+          pattern: ['./libs/**/*.js', './app/models/**/*.js', './app/controllers/**/*.js'],
           debugDirectory: 'debug'
       }))
       .pipe(mocha())
