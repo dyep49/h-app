@@ -13,4 +13,13 @@ module.exports = function(app) {
 
     });
   });
+
+  router.get('/prices', function(req, res, next) {
+    Price.find(function(err, prices) {
+      if(err)
+        next(err);
+
+      res.json({prices: prices});
+    })
+  })
 };

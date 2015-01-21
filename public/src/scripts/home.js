@@ -1,1 +1,1 @@
-console.log('test');
+require('./chart.js')();
