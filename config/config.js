@@ -29,7 +29,7 @@ var config = {
       name: 'hackerati-app'
     },
     port: process.env.PORT,
-    db: process.env.MONGO_URL
+    db: process.env.MONGOLAB_URI
     
   }
 };
