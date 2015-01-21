@@ -20,6 +20,6 @@ PriceSchema.methods.create = function(attrs) {
   });
 
   return deferred.promise;
-}
+};
 
 module.exports = mongoose.model('Price', PriceSchema);

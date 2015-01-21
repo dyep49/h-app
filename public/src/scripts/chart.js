@@ -3,7 +3,7 @@ var d3 = require('d3');
 module.exports = function() {
   'use strict';
 
-  var margin = {top: 20, right: 20, bottom: 30, left: 40};
+  var margin = {top: 20, right: 20, bottom: 30, left: 100};
   var width = 960 - margin.left - margin.right;
   var height = 500 - margin.top - margin.bottom;
 
@@ -25,14 +25,30 @@ module.exports = function() {
     .attr('width', width + margin.left + margin.right)
     .attr('height', height + margin.top + margin.bottom)
     .append('g')
-    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+
+  var zoom = d3.behavior.zoom()
+    .on("zoom", draw);
+
+  svg.append("rect")
+    .attr("class", "pane")
+    .attr("width", width)
+    .attr("height", height)
+    .call(zoom);
 
   d3.json('/prices', function(err, data) {
-    buildChart(data.prices);
-  })
+    var parsedData = data.prices.map(function(datum) {
+      datum.time = new Date(datum.time);
+      return datum;
+    });
+
+    buildChart(parsedData);
+  });
 
   function buildChart(data) {
-    var timeExtent = d3.extent(data, function(d) {
+    var sample = data.reverse().slice(0, 20)
+
+    var timeExtent = d3.extent(sample, function(d) {
       return new Date(d.time);
     });
 
@@ -41,7 +57,8 @@ module.exports = function() {
     });
 
     x.domain(timeExtent);
-    y.domain(priceExtent);
+    y.domain([priceExtent[0] - 25, priceExtent[0] + 25]);
+    zoom.x(x);
 
     svg.append('g')
       .attr('class', 'x axis')
@@ -52,13 +69,35 @@ module.exports = function() {
       .attr('class', 'y axis')
       .call(yAxis)
       .append('text')
-      .attr('transform', 'rotate(-90')
+      .attr('transform', 'rotate(-90)')
       .attr('y', 6)
       .attr('dy', '.71em')
       .style('text-anchor', 'end')
       .text('Last Price ($)');
 
+    svg.selectAll('.dot')
+      .data(data)
+      .enter().append('circle')
+      .attr('class', 'dot')
+      .attr('r', 3.5)
+      .attr('cx', function(d) {
+        return x(d.time);
+      })
+      .attr('cy', function(d) {
+        return y(d.lastPrice);
+      });
+
+
+    draw();
+
+  }
+
+  function draw() {
+    svg.select("g.x.axis").call(xAxis);
+    svg.select("g.y.axis").call(yAxis);
+    // svg.select("path.area").attr("d", area);
+    // svg.select("path.line").attr("d", line);
   }
 
   
-}
+};

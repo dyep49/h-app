@@ -20,6 +20,6 @@ module.exports = function(app) {
         next(err);
 
       res.json({prices: prices});
-    })
-  })
+    });
+  });
 };

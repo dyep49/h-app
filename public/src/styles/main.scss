@@ -1,3 +1,5 @@
-body {
-  background: white;
-}
+//Layout
+@import 'base';
+
+//Partials
+@import 'partials/chart';
