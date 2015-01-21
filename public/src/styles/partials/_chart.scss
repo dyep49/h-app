@@ -10,3 +10,9 @@ rect.pane {
   fill: none;
   pointer-events: all;
 }
+
+path.line {
+  fill: none;
+  stroke: black;
+  stroke-width: 1px;
+}

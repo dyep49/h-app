@@ -25,7 +25,12 @@ module.exports = function() {
     .attr('width', width + margin.left + margin.right)
     .attr('height', height + margin.top + margin.bottom)
     .append('g')
-    .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+  var line = d3.svg.line()
+    .interpolate("step-after")
+    .x(function(d) { return x(d.time); })
+    .y(function(d) { return y(d.lastPrice); });
 
   var zoom = d3.behavior.zoom()
     .on("zoom", draw);
@@ -46,17 +51,16 @@ module.exports = function() {
   });
 
   function buildChart(data) {
-    var sample = data.reverse().slice(0, 20)
+    var currentTime = new Date();
+    var timeMin = new Date();
+    timeMin.setHours(currentTime.getHours() - 1);
 
-    var timeExtent = d3.extent(sample, function(d) {
-      return new Date(d.time);
-    });
+    x.domain([timeMin, currentTime]);
 
     var priceExtent = d3.extent(data, function(d) {
       return d.lastPrice;
     });
 
-    x.domain(timeExtent);
     y.domain([priceExtent[0] - 25, priceExtent[0] + 25]);
     zoom.x(x);
 
@@ -87,6 +91,11 @@ module.exports = function() {
         return y(d.lastPrice);
       });
 
+    svg.append("path")
+    .attr("class", "line")
+
+    svg.select("path.line").data([data]);
+
 
     draw();
 
@@ -95,8 +104,17 @@ module.exports = function() {
   function draw() {
     svg.select("g.x.axis").call(xAxis);
     svg.select("g.y.axis").call(yAxis);
-    // svg.select("path.area").attr("d", area);
-    // svg.select("path.line").attr("d", line);
+    svg.select("path.line").attr("d", line);
+
+    svg.selectAll('.dot')
+    .attr('class', 'dot')
+    .attr('r', 3.5)
+    .attr('cx', function(d) {
+      return x(d.time);
+    })
+    .attr('cy', function(d) {
+      return y(d.lastPrice);
+    });
   }
 
   
