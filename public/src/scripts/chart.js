@@ -23,7 +23,7 @@ module.exports = function() {
 
 
 
-  var svg = d3.select('body').append('svg')
+  var svg = d3.select('.chart-container').append('svg')
     .attr('width', width + margin.left + margin.right)
     .attr('height', height + margin.top + margin.bottom)
     .append('g')
@@ -43,14 +43,21 @@ module.exports = function() {
     .attr("height", height)
     .call(zoom);
 
-  d3.json('/prices', function(err, data) {
-    var parsedData = data.prices.map(function(datum) {
-      datum.time = new Date(datum.time);
-      return datum;
-    });
+  // d3.json('/prices', function(err, data) {
+  //   var parsedData = data.prices.map(function(datum) {
+  //     datum.time = new Date(datum.time);
+  //     return datum;
+  //   });
 
-    buildChart(parsedData);
+  //   buildChart(parsedData);
+  // });
+
+  var parsedData = JSON.parse(prices).map(function(datum) {
+    datum.time = new Date(datum.time);
+    return datum;
   });
+
+  buildChart(parsedData);
 
   function buildChart(data) {
     var currentTime = new Date();
