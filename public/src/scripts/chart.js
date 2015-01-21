@@ -3,7 +3,7 @@ var d3 = require('d3');
 module.exports = function() {
   'use strict';
 
-  var margin = {top: 20, right: 20, bottom: 30, left: 100};
+  var margin = {top: 20, right: 20, bottom: 30, left: 40};
   var width = 960 - margin.left - margin.right;
   var height = 500 - margin.top - margin.bottom;
 
@@ -20,6 +20,8 @@ module.exports = function() {
   var yAxis = d3.svg.axis()
     .scale(y)
     .orient('left');
+
+
 
   var svg = d3.select('body').append('svg')
     .attr('width', width + margin.left + margin.right)
@@ -66,12 +68,10 @@ module.exports = function() {
 
     svg.append('g')
       .attr('class', 'x axis')
-      .attr('transform', 'translate(0,' + height + ')')
-      .call(xAxis);
+      .attr('transform', 'translate(0,' + height + ')');
 
     svg.append('g')
       .attr('class', 'y axis')
-      .call(yAxis)
       .append('text')
       .attr('transform', 'rotate(-90)')
       .attr('y', 6)
@@ -92,7 +92,7 @@ module.exports = function() {
       });
 
     svg.append("path")
-    .attr("class", "line")
+      .attr("class", "line")
 
     svg.select("path.line").data([data]);
 
