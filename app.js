@@ -60,4 +60,4 @@ var collectData = require('./libs/collect-data.js');
 setInterval(function() {
     console.log('==================')
     collectData()
-}, 30000)
+}, 300000)

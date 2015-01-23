@@ -15,19 +15,17 @@ module.exports = function() {
       debug: true
     }
 
-    var bundle = browserify(opts)
-      .transform({global: true}, deamdify)
-      .transform({global: true}, debowerify);
+    var bundle = browserify(opts);
 
     libs.forEach(function(lib) {
-      bundle.require(lib)
-    })
+      bundle.require(lib);
+    });
 
     return bundle
       .bundle()
       .pipe(source('vendor.js'))
-      .pipe((gStreamify(uglify())))
-      .pipe(gulp.dest('./public/build/scripts'))
+      // .pipe((gStreamify(uglify())))
+      .pipe(gulp.dest('./public/build/scripts'));
   })
 
 }

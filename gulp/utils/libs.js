@@ -1,3 +1,5 @@
 module.exports = [
-  'd3'
+  'dc',
+  'd3',
+  'crossfilter'
 ]

@@ -1,4 +1,5 @@
 var d3 = require('d3');
+var list = require('./public/src/scripts/vendor/list.js/dist/list.min.js');
 
 module.exports = function() {
   'use strict';

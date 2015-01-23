@@ -1,1 +1,2 @@
-require('./chart.js')();
+// require('./chart.js')();
+require('./crossfilter.js')();
