@@ -1,5 +1,6 @@
 module.exports = [
   'dc',
   'd3',
-  'crossfilter'
+  'crossfilter',
+  'socket.io-client'
 ]

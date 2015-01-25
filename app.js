@@ -6,7 +6,6 @@ var app = express();
 
 
 var server = app.listen(config.port);
-var io = require('socket.io').listen(server);
 console.log('app running on port ' + config.port);
 
 
@@ -22,11 +21,6 @@ fs.readdirSync(modelsPath).forEach(function (file) {
     require(modelsPath + '/' + file);
   }
 });
-
-
-io.sockets.on('connection', function(socket) {
-  console.log('socket ioooooo')
-})
 
 // Execute commands in clean exit
 process.on('exit', function () {
@@ -53,11 +47,19 @@ process.on('SIGTERM', function () {
 
 require('./config/express')(app, config);
 
+//Init websockets connection
+var io = require('socket.io')(server);
+io.on('connection', function(socket) {
+  console.log('Websockets connection established');
 
-//Start collecting data
-var collectData = require('./libs/collect-data.js');
+  //Start collecting data
+  var collectData = require('./libs/collect-data.js');
 
-setInterval(function() {
-    console.log('==================')
-    collectData()
-}, 30000)
+  setInterval(function() {
+    collectData().then(function(price) {
+      socket.emit('price', price);
+    });    
+  }, 5000)
+});
+
+

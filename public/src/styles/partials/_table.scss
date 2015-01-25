@@ -1,0 +1,26 @@
+#dc-data-table {
+
+  border-collapse: collapse;
+
+  .dc-table-group {
+    display: none;
+  }
+
+  td {
+    border: 1px solid black;
+    padding: 5px;
+  }
+
+  tbody {
+    
+    tr {
+      background: lightgrey;
+    
+      &:nth-child(even) {
+        background: rgba(204, 204, 204, .5);
+      }
+
+    }    
+  }
+
+}

@@ -23,7 +23,8 @@
     "dc": "~2.0.0-beta.3",
     "d3": "~3.5.3",
     "crossfilter": "~1.3.11",
-    "underscore": "~1.7.0"
+    "underscore": "~1.7.0",
+    "socket.io-client": "~1.3.2"
   },
   "devDependencies": {
     "gulp": "~3.8.10",
