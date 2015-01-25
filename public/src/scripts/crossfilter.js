@@ -2,7 +2,8 @@ var dc = require('dc');
 
 module.exports = function() {
   //prep data for dc/crossfilter
-  var data = JSON.parse(prices).map(function(price) {
+  var parsedPrices = JSON.parse(prices);
+  var data = parsedPrices.map(function(price, index) {
     price.time = new Date(price.time);
     return price;
   });
@@ -14,12 +15,7 @@ module.exports = function() {
     return d.time;
   });
 
-  var priceDimension = bitstampData.dimension(function(d) {
-    return d.lastPrice;
-  });
-
   var priceGroup = dateDimension.group().reduceSum(function(d) {
-    console.log(d.lastPrice);
     return d.lastPrice
   })
 
@@ -30,15 +26,47 @@ module.exports = function() {
     return d.time;
   });
 
+  var priceExtent = d3.extent(data, function(d) {
+    return d.lastPrice;
+  })
+
   lineChart
+    .width(700)
+    .height(150)
+    .margins({top: 10, right: 10, bottom: 20, left: 60})
+    .renderHorizontalGridLines(true)
+    .renderVerticalGridLines(true)
+    .x(d3.time.scale().domain(timeExtent))
+    .y(d3.scale.linear().domain(priceExtent))
+    .dimension(dateDimension)
+    .group(priceGroup);
+
+  //dc snippet chart
+  var snippetChart = dc.lineChart('#snippet-container');
+
+  snippetChart
     .width(700)
     .height(400)
     .margins({top: 10, right: 10, bottom: 20, left: 60})
-    .elasticY(true)
-    .renderDataPoints(true)    
+    .renderHorizontalGridLines(true)
+    .renderVerticalGridLines(true)
+    .brushOn(false)
     .x(d3.time.scale().domain(timeExtent))
+    .y(d3.scale.linear().domain(priceExtent))
     .dimension(dateDimension)
-    .group(priceGroup)
+    .group(priceGroup);
+
+
+  lineChart.on('filtered', function(chart, filter) {
+    if(!filter)
+      return;
+    
+    var timeMin = filter[0];
+    var timeMax = filter[1];
+    snippetChart.x(d3.time.scale().domain([timeMin, timeMax]));
+    snippetChart.redraw();      
+  })
+
 
 
 
