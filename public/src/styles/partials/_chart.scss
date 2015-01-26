@@ -1,32 +1,15 @@
-.axis path,
-.axis line {
-  fill: none;
-  stroke: #000;
-  shape-rendering: crispEdges;
+#chart-container {
+  width: 100%;
+  max-width: 970px;
 }
 
-rect.pane {
-  cursor: move;
-  fill: none;
-  pointer-events: all;
-}
-
-path.line {
-  fill: none;
-  stroke: black;
-  stroke-width: 1px;
-}
-
-.brush {
-  fill: #0f0;
-  opacity: .5;
-}
-
-.extent {
-  fill: #0f0;
+#snippet-container {
+  width: 100%;
+  max-width: 970px;
 }
 
 circle {
   fill: lightgrey;
   fill-opacity: .5 !important;
 }
+

@@ -2,6 +2,9 @@ var dc = require('dc');
 var socket = require('./websockets.js');
 
 module.exports = function() {
+  var mostRecent;
+  var priceMin;
+  var priceMax;
 
   //prep data for dc/crossfilter
   var parsedPrices = JSON.parse(prices);
@@ -9,6 +12,8 @@ module.exports = function() {
     price.time = new Date(price.time);
     return price;
   });
+
+  mostRecent = data[data.length - 1];
 
   var bitstampData = crossfilter(data);
   var all = bitstampData.groupAll();
@@ -22,6 +27,10 @@ module.exports = function() {
   var priceDimension = bitstampData.dimension(function(d) {
     return d.lastPrice;
   });
+
+  var unfilteredPriceDimension = bitstampData.dimension(function(d) {
+    return d.lastPrice;
+  })
 
   var priceGroup = dateDimension.group().reduceSum(function(d) {
     return d.lastPrice
@@ -38,15 +47,16 @@ module.exports = function() {
     return d.lastPrice;
   })
 
-  var priceMin = priceDimension.bottom(1)[0].lastPrice * .975;
-  var priceMax = priceDimension.top(1)[0].lastPrice * 1.025;
+  priceMin = priceDimension.bottom(1)[0].lastPrice * .975;
+  priceMax = priceDimension.top(1)[0].lastPrice * 1.025;
 
   lineChart
-    .width(700)
+    .width(null)
     .height(150)
     .margins({top: 10, right: 10, bottom: 20, left: 60})
     .renderHorizontalGridLines(true)
     .renderVerticalGridLines(true)
+    .elasticX(true)
     .x(d3.time.scale().domain(timeExtent))
     .y(d3.scale.linear().domain([priceMin, priceMax]))
     .dimension(dateDimension)
@@ -56,7 +66,7 @@ module.exports = function() {
   var snippetChart = dc.lineChart('#snippet-container');
 
   snippetChart
-    .width(700)
+    .width(null)
     .height(400)
     .margins({top: 10, right: 10, bottom: 20, left: 60})
     .renderHorizontalGridLines(true)
@@ -67,16 +77,26 @@ module.exports = function() {
     .dimension(dateDimension)
     .group(priceGroup);
 
+  //Snippet points tooltip
+  snippetChart.title(function(d) { 
+    return 'Time: ' + d.key + ' Price: ' + d.value;})
 
-  lineChart.on('filtered', function(chart, filter) {
-    if(!filter)
-      return;
-
-    var timeMin = filter[0];
-    var timeMax = filter[1];
-    snippetChart.x(d3.time.scale().domain([timeMin, timeMax]));
-    snippetChart.redraw();      
+  lineChart.renderlet(function(chart) {
+    // dc.events.trigger(function() {
+      snippetChart.focus(chart.filter());
+    // }, 100)
   })
+
+
+  // lineChart.on('filtered', function(chart, filter) {
+  //   if(!filter)
+  //     return;
+
+  //   var timeMin = filter[0];
+  //   var timeMax = filter[1];
+  //   snippetChart.x(d3.time.scale().domain([timeMin, timeMax]));
+  //   snippetChart.redraw();      
+  // })
 
 
 
@@ -94,21 +114,31 @@ module.exports = function() {
     .columns([
       function(d) {return parseTime(d.time)},
       function(d) {return d.lastPrice}
-    ]);
+    ])
+    .sortBy(function(d) {
+      return d.time
+    })
+    .order(d3.descending);
 
   dc.renderAll();
 
 
   socket.on('price', function(price) {
-    console.log('new price');
     var newPrice = {}
     newPrice.time = new Date(price.time);
     newPrice.lastPrice = price.lastPrice;
 
 
-    if(newPrice.time.toString() !== dateDimension.top(1)[0].time.toString()) {
+    if(newPrice.time.toString() !== mostRecent.time.toString()) {
+      console.log(newPrice);
+      mostRecent = newPrice;
 
       bitstampData.add([newPrice]);
+
+      if(newPrice.lastPrice * 1.025 > priceMax || newPrice.lastPrice < priceMin * .975) {
+        updateYAxis(newPrice.lastPrice);
+      }
+
       updateLineChart();
 
       dc.redrawAll();          
@@ -116,21 +146,22 @@ module.exports = function() {
 
   })
 
+  function updateYAxis(price) {
+    var newDomain = price * 1.025 > priceMax ? [priceMin, price * 1.025] : [price * .975, priceMax];
+
+    priceMin = newDomain[0];
+    priceMax = newDomain[1];
+
+    lineChart.y(d3.scale.linear().domain([priceMin, priceMax]))
+  }
+
   function updateLineChart() {
-
-    //update price range with padding
-    var updatedPriceMin = priceDimension.bottom(1)[0].lastPrice * .975;
-    var updatedPriceMax = priceDimension.top(1)[0].lastPrice * 1.025;
-
     //update time range 
     var updatedTimeExtent = d3.time.scale()
-      .domain([timeExtent[0], dateDimension.top(1)[0].time]);
+      .domain([timeExtent[0], Date.now()]);
 
     lineChart
       .x(updatedTimeExtent)
-      .y(d3.scale.linear().domain([updatedPriceMin, updatedPriceMax]));
-
-
   }
 
 }

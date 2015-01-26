@@ -1,13 +1,18 @@
 #dc-data-table {
 
   border-collapse: collapse;
+  width: 80%;
+  margin: 0 auto;
 
   .dc-table-group {
     display: none;
   }
 
+  th {
+    text-align: left;
+  }
+
   td {
-    border: 1px solid black;
     padding: 5px;
   }
 
@@ -15,7 +20,11 @@
     
     tr {
       background: lightgrey;
-    
+
+      &:hover {
+        opacity: .7;
+      }
+
       &:nth-child(even) {
         background: rgba(204, 204, 204, .5);
       }
