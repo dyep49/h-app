@@ -36,7 +36,17 @@ module.exports = function(app) {
       if(err)
         next(err);
 
-      res.json({prices: prices});
+      var filteredPrices = prices.map(function(price) {
+        var newPriceObj = {};
+        newPriceObj.time = price.time.toString();
+        newPriceObj.lastPrice = price.lastPrice;
+
+        return newPriceObj
+      })
+
+      var uniquePrices = queryHelper.uniqueByProp(filteredPrices, 'time')
+
+      res.json({prices: uniquePrices});
     });
   });
 };
