@@ -1,3 +1,3 @@
 // require('./chart.js')();
-require('./crossfilter.js')();
-require('./websockets.js')
+require('./charts.js')();
+require('./websockets.js');
