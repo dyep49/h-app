@@ -1,5 +1,7 @@
 var dc = require('dc');
 var cf = require('./crossfilter.js');
+var table = require('./table.js');
+var lineChart = require('./linechart.js');
 var socket = require('./websockets.js');
 
 module.exports = function() {
@@ -15,22 +17,25 @@ module.exports = function() {
     return d.time;
   });
 
+  //Most recent price object
   mostRecent = dateDimension.top(1)[0];
 
   var priceDimension = bitstampData.dimension(function(d) {
     return d.lastPrice;
   });
-  
+
   var priceGroup = dateDimension.group().reduceSum(function(d) {
     return d.lastPrice
   })
 
+  //dc data table
+  table.init(dateDimension);
+
   //dc line chart
   var lineChart = dc.lineChart('#chart-container');
 
-  var timeExtent = d3.extent(data, function(d) {
-    return d.time;
-  });
+  var timeMin = dateDimension.bottom(1)[0].time;
+  var timeMax = dateDimension.top(1)[0].time;
 
   var priceExtent = d3.extent(data, function(d) {
     return d.lastPrice;
@@ -46,7 +51,7 @@ module.exports = function() {
     .renderHorizontalGridLines(true)
     .renderVerticalGridLines(true)
     .elasticX(true)
-    .x(d3.time.scale().domain(timeExtent))
+    .x(d3.time.scale().domain([timeMin, timeMax]))
     .y(d3.scale.linear().domain([priceMin, priceMax]))
     .dimension(dateDimension)
     .group(priceGroup);
@@ -61,7 +66,7 @@ module.exports = function() {
     .renderHorizontalGridLines(true)
     .renderVerticalGridLines(true)
     .brushOn(false)
-    .x(d3.time.scale().domain(timeExtent))
+    .x(d3.time.scale().domain([timeMin, timeMax]))
     .y(d3.scale.linear().domain(priceExtent))
     .dimension(dateDimension)
     .group(priceGroup);
@@ -90,24 +95,7 @@ module.exports = function() {
 
 
 
-  //dc data table
-  var dataTable = dc.dataTable('#dc-data-table');
-  var parseTime = d3.time.format("%b %e %H:%M:%S")
 
-  dataTable.width(960).height(800)
-    .dimension(dateDimension)
-    .group(function(d) {
-      return ""
-    })
-    .size(20000)
-    .columns([
-      function(d) {return parseTime(d.time)},
-      function(d) {return d.lastPrice}
-    ])
-    .sortBy(function(d) {
-      return d.time
-    })
-    .order(d3.descending);
 
   dc.renderAll();
 
