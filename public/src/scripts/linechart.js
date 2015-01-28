@@ -35,7 +35,6 @@ function lineChart() {
       });
 
       if(brushDomain) {
-        console.log(brushDomain);
         xScale
           .domain(brushDomain)
           .range([0, width - margin.left - margin.right]);

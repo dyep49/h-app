@@ -2,11 +2,6 @@ svg {
   font: 10px sans-serif;
 }
 
-.area {
-  fill: steelblue;
-  clip-path: url(#clip);
-}
-
 .axis path,
 .axis line {
   fill: none;
@@ -22,7 +17,7 @@ svg {
 
 .line {
   fill: none;
-  stroke: steelblue;
+  stroke: magenta;
   stroke-width: 1.5px;
   clip-path: url(#clip);
 

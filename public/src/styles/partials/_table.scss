@@ -1,11 +1,9 @@
-#dc-data-table {
+#data-table {
 
-  border-collapse: collapse;
-  width: 80%;
-  margin: 0 auto;
-
-  .dc-table-group {
-    display: none;
+  table {
+    border-collapse: separate;
+    // width: 80%;
+    margin: 0 auto;    
   }
 
   th {
@@ -13,20 +11,21 @@
   }
 
   td {
-    padding: 5px;
+    padding: 10px 5px;
   }
 
   tbody {
     
     tr {
-      background: lightgrey;
+      background: #f0f3f5;
+      // border-bottom: 1px solid black;
 
       &:hover {
         opacity: .7;
       }
 
       &:nth-child(even) {
-        background: rgba(204, 204, 204, .5);
+        background: white;
       }
 
     }    

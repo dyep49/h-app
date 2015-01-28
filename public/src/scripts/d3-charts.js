@@ -51,18 +51,41 @@ module.exports = function() {
       .call(brush)
       .selectAll("rect")
       .attr("y", -6)
-      .attr("height", context.height() + 7);
+      .attr("height", context.height() + 7)
+      .attr('transform', 'translate(' + context.margin().left + ',0)');
+
+    var dataTable = tabulate()
+
+    d3.select('#data-table')
+      .datum(data)
+      .call(dataTable);
+
+
 
     function brushed() {
-      console.log('brush');
       if(!brush.empty()) {
         focus.brushDomain(brush.extent());
 
         d3.select('#focus')
           .datum(data)
           .call(focus);
+
+        d3.select('table').remove();
+
+        var brushedData = data.filter(function(datum) {
+          var timeMin = brush.extent()[0];
+          var timeMax = brush.extent()[1];
+          return datum.time >= timeMin && datum.time <= timeMax
+        }) 
+
+
+        d3.select('#data-table')
+          .datum(brushedData)
+          .call(dataTable);
       }
     }
+
+
 
     //Scale charts on resize
     d3.select(window).on('resize', resize)
@@ -82,8 +105,6 @@ module.exports = function() {
         .call(context);
     }
 
-
-    tabulate(data, ['time', 'price'])
   })
 
 }
