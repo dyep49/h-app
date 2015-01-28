@@ -3,7 +3,7 @@
 var d3 = require('d3');
 var lineChart = require('./linechart.js');
 var tabulate = require('./table.js');
-// var io = require('./websockets.js');
+var io = require('./websockets.js');
 
 
 
@@ -22,10 +22,15 @@ module.exports = function() {
   d3.json('/prices', function(err, data) {
     data = data.prices.map(parsePrice);
 
-    // io.on('price', function(price) {
-    //   newPrice = parsePrice(price);
-    //   data.push(price);
-    // })
+    io.on('price', function(price) {
+      newPrice = parsePrice(price);
+
+      if(JSON.stringify(newPrice) !== JSON.stringify(data[data.length - 1])) {
+        data.push(newPrice);
+        update();        
+      }
+
+    })
 
     var context = lineChart()    
       .x(function(d) {return d.time})
@@ -73,15 +78,29 @@ module.exports = function() {
       .call(dataTable);
 
 
+    function update() {
+      var brushExtent = brush.extent();
+      brushed();
+      d3.select('.brush').call(brush.extent(brushExtent));
 
-    function brushed() {
-      if(!brush.empty()) {
-        var focusDomain = brush.extent();
-        var filteredData = data.filter(function(datum) {
+    }
+
+    function filterDataByDateRange(data, extent) {
+        var timeMin = extent[0];
+        var timeMax = extent[1];
+
+        return data.filter(function(datum) {
           var timeMin = brush.extent()[0];
           var timeMax = brush.extent()[1];
           return datum.time >= timeMin && datum.time <= timeMax
         }) 
+    }
+
+
+    function brushed() {
+      if(!brush.empty()) {
+        var focusDomain = brush.extent();
+        var filteredData = filterDataByDateRange(data, focusDomain);
       } else {
         var focusDomain = d3.extent(data, function(d) {return d.time;})
         var filteredData = data;
@@ -98,20 +117,11 @@ module.exports = function() {
       d3.select('#data-table')
         .datum(filteredData)
         .call(dataTable);
-    }
-
-    function update() {
-      d3.select('#focus')
-        .datum(data)
-        .call(focus);
 
       d3.select('#context')
         .datum(data)
         .call(context);
 
-      d3.select('#data-table')
-        .datum(data)
-        .call(dataTable);
     }
 
 

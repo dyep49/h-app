@@ -55,11 +55,11 @@ io.on('connection', function(socket) {
   //Start collecting data
   var collectData = require('./libs/collect-data.js');
 
-  // setInterval(function() {
-  //   collectData().then(function(price) {
-  //     socket.emit('price', price);
-  //   });    
-  // }, 5000)
+  setInterval(function() {
+    collectData().then(function(price) {
+      socket.emit('price', price);
+    });    
+  }, 5000)
 });
 
 
