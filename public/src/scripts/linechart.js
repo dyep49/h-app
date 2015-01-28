@@ -16,6 +16,8 @@ function lineChart() {
   var xAxis = d3.svg.axis().scale(xScale).orient('bottom');
   var line = d3.svg.line().x(X).y(Y);
 
+  var yPadding = 0.025;
+
   var appendYAxis = false;
   var yAxis = d3.svg.axis().scale(yScale).orient('left')
 
@@ -43,8 +45,13 @@ function lineChart() {
           .domain(d3.extent(data, function(d) {return d[0]; }))
           .range([0, width - margin.left - margin.right]);
       }
+
+      var yExtent = d3.extent(data, function(d) {return d[1]})
+      var yMin = yExtent[0] * (1 - yPadding);
+      var yMax = yExtent[1] * (1 + yPadding)
+
       yScale
-        .domain(d3.extent(data, function(d) {return d[1]; }))
+        .domain([yMin, yMax])
         .range([height - margin.top - margin.bottom, 0]);
 
       //Select the svg element if it exists
@@ -179,6 +186,12 @@ function lineChart() {
   chart.brushDomain = function(_) {
     if(!arguments.length) return brushDomain;
     brushDomain = _;
+    return chart;
+  }
+
+  chart.yPadding = function(_) {
+    if(!arguments.length) return yPadding;
+    yPadding = _;
     return chart;
   }
 

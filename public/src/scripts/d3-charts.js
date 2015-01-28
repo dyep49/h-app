@@ -3,22 +3,34 @@
 var d3 = require('d3');
 var lineChart = require('./linechart.js');
 var tabulate = require('./table.js');
+// var io = require('./websockets.js');
+
+
 
 module.exports = function() {
 
   var width = parseInt(d3.select('.content-container').style('width'))
 
+  function parsePrice(price) {
+    var parsedPrice = {};
+    parsedPrice.time = new Date(price.time);
+    parsedPrice.price = +price.lastPrice;
+
+    return parsedPrice
+  }
+
   d3.json('/prices', function(err, data) {
-    data = data.prices.map(function(d) {
-      var parsedDatum = {}
-      parsedDatum.time = new Date(d.time);
-      parsedDatum.price = +d.lastPrice;
-      return parsedDatum;
-    });
+    data = data.prices.map(parsePrice);
+
+    // io.on('price', function(price) {
+    //   newPrice = parsePrice(price);
+    //   data.push(price);
+    // })
 
     var context = lineChart()    
       .x(function(d) {return d.time})
       .y(function(d) {return d.price})
+      .yPadding(0.01)
       .height(100)
       .width(width);
 
@@ -64,25 +76,42 @@ module.exports = function() {
 
     function brushed() {
       if(!brush.empty()) {
-        focus.brushDomain(brush.extent());
-
-        d3.select('#focus')
-          .datum(data)
-          .call(focus);
-
-        d3.select('table').remove();
-
-        var brushedData = data.filter(function(datum) {
+        var focusDomain = brush.extent();
+        var filteredData = data.filter(function(datum) {
           var timeMin = brush.extent()[0];
           var timeMax = brush.extent()[1];
           return datum.time >= timeMin && datum.time <= timeMax
         }) 
+      } else {
+        var focusDomain = d3.extent(data, function(d) {return d.time;})
+        var filteredData = data;
+      } 
 
+      focus.brushDomain(focusDomain);
 
-        d3.select('#data-table')
-          .datum(brushedData)
-          .call(dataTable);
-      }
+      d3.select('#focus')
+        .datum(data)
+        .call(focus);
+
+      d3.select('table').remove();
+
+      d3.select('#data-table')
+        .datum(filteredData)
+        .call(dataTable);
+    }
+
+    function update() {
+      d3.select('#focus')
+        .datum(data)
+        .call(focus);
+
+      d3.select('#context')
+        .datum(data)
+        .call(context);
+
+      d3.select('#data-table')
+        .datum(data)
+        .call(dataTable);
     }
 
 
