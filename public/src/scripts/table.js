@@ -1,29 +1,39 @@
-var dc = require('dc');
+var d3 = require('d3');
 
-var dcDataTable = {
+// The table generation function
+function tabulate(data, columns) {
+    var table = d3.select(".content-container").append("table")
+            .attr("style", "margin-left: 250px"),
+        thead = table.append("thead"),
+        tbody = table.append("tbody");
 
-  init: function(dimension) {
-    var dataTable = dc.dataTable('#dc-data-table');
-    var parseTime = d3.time.format("%b %e %H:%M:%S")
+    // append the header row
+    thead.append("tr")
+        .selectAll("th")
+        .data(columns)
+        .enter()
+        .append("th")
+            .text(function(column) { return column; });
 
-    dataTable.width(960).height(800)
-      .dimension(dimension)
-      .group(function(d) {
-        return ""
-      })
-      .size(20000)
-      .columns([
-        function(d) {return parseTime(d.time)},
-        function(d) {return d.lastPrice}
-      ])
-      .sortBy(function(d) {
-        return d.time
-      })
-      .order(d3.descending);
+    // create a row for each object in the data
+    var rows = tbody.selectAll("tr")
+        .data(data)
+        .enter()
+        .append("tr");
 
-    return dataTable
-  }
+    // create a cell in each row for each column
+    var cells = rows.selectAll("td")
+        .data(function(row) {
+            return columns.map(function(column) {
+                return {column: column, value: row[column]};
+            });
+        })
+        .enter()
+        .append("td")
+        .attr("style", "font-family: Courier") // sets the font style
+            .html(function(d) { return d.value; });
+    
+    return table;
 }
 
-module.exports = dcDataTable;
-
+module.exports = tabulate;

@@ -2,6 +2,7 @@
 
 var d3 = require('d3');
 var lineChart = require('./linechart.js');
+var tabulate = require('./table.js');
 
 module.exports = function() {
 
@@ -63,6 +64,7 @@ module.exports = function() {
       }
     }
 
+    //Scale charts on resize
     d3.select(window).on('resize', resize)
 
     function resize() {
@@ -78,9 +80,10 @@ module.exports = function() {
       d3.select('#context')
         .datum(data)
         .call(context);
-
-
     }
+
+
+    tabulate(data, ['time', 'price'])
   })
 
 }
