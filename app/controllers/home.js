@@ -11,28 +11,12 @@ module.exports = function(app) {
   app.use('/', router);
 
   router.get('/', function(req, res, next) {
-    Price.find(function(err, prices) {
-      if(err)
-        next(err);
-
-      var filteredPrices = prices.map(function(price) {
-        var newPriceObj = {};
-        newPriceObj.time = price.time.toString();
-        newPriceObj.lastPrice = price.lastPrice;
-
-        return newPriceObj
-      })
-
-      var uniquePrices = queryHelper.uniqueByProp(filteredPrices, 'time')
-
-      res.render('home/home', {
-        prices: uniquePrices
-      });
-    });
+    res.render('home/home', {});
   });
 
   router.get('/prices', function(req, res, next) {
-    Price.find(function(err, prices) {
+    var query = Price.find({}).lean().limit(2500)
+    query.exec(function(err, prices) {
       if(err)
         next(err);
 
