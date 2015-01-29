@@ -1,4 +1,5 @@
 //Adapted from http://bl.ocks.org/mbostock/1667367
+'use strict';
 
 var d3 = require('d3');
 var lineChart = require('./linechart.js');
@@ -9,40 +10,40 @@ var io = require('./websockets.js');
 
 module.exports = function() {
 
-  var width = parseInt(d3.select('.content-container').style('width'))
+  var width = parseInt(d3.select('.content-container').style('width'));
 
   function parsePrice(price) {
     var parsedPrice = {};
     parsedPrice.time = new Date(price.time);
     parsedPrice.price = +price.lastPrice;
 
-    return parsedPrice
+    return parsedPrice;
   }
 
   d3.json('/prices', function(err, data) {
     data = data.prices.map(parsePrice);
 
     io.on('price', function(price) {
-      newPrice = parsePrice(price);
+      var newPrice = parsePrice(price);
 
       if(JSON.stringify(newPrice) !== JSON.stringify(data[data.length - 1])) {
         data.push(newPrice);
         update();        
       }
 
-    })
+    });
 
     var context = lineChart()    
-      .x(function(d) {return d.time})
-      .y(function(d) {return d.price})
+      .x(function(d) { return d.time; })
+      .y(function(d) { return d.price; })
       .yPadding(0.01)
       .height(100)
       .width(width);
 
 
     var focus = lineChart()
-      .x(function(d) {return d.time})
-      .y(function(d) {return d.price})
+      .x(function(d) { return d.time; })
+      .y(function(d) { return d.price; })
       .width(width)
       .margin({top: 10, right: 10, bottom: 30, left: 40})
       .appendYAxis(true)
@@ -71,19 +72,14 @@ module.exports = function() {
       .attr("height", context.height() + 7)
       .attr('transform', 'translate(' + context.margin().left + ',0)');
 
-    var dataTable = tabulate()
+    var dataTable = tabulate();
 
     d3.select('#data-table')
       .datum(data)
       .call(dataTable);
 
 
-    function update() {
-      var brushExtent = brush.extent();
-      brushed();
-      d3.select('.brush').call(brush.extent(brushExtent));
 
-    }
 
     function filterDataByDateRange(data, extent) {
         var timeMin = extent[0];
@@ -92,18 +88,20 @@ module.exports = function() {
         return data.filter(function(datum) {
           var timeMin = brush.extent()[0];
           var timeMax = brush.extent()[1];
-          return datum.time >= timeMin && datum.time <= timeMax
-        }) 
+          return datum.time >= timeMin && datum.time <= timeMax;
+        });
     }
 
-
     function brushed() {
+      var focusDomain;
+      var filteredData;
+
       if(!brush.empty()) {
-        var focusDomain = brush.extent();
-        var filteredData = filterDataByDateRange(data, focusDomain);
+        focusDomain = brush.extent();
+        filteredData = filterDataByDateRange(data, focusDomain);
       } else {
-        var focusDomain = d3.extent(data, function(d) {return d.time;})
-        var filteredData = data;
+        focusDomain = d3.extent(data, function(d) {return d.time;});
+        filteredData = data;
       } 
 
       focus.brushDomain(focusDomain);
@@ -124,13 +122,19 @@ module.exports = function() {
 
     }
 
+    function update() {
+      var brushExtent = brush.extent();
+      brushed();
+      d3.select('.brush').call(brush.extent(brushExtent));
+    }
+
 
 
     //Scale charts on resize
-    d3.select(window).on('resize', resize)
+    d3.select(window).on('resize', resize);
 
     function resize() {
-      width = parseInt(d3.select('.content-container').style('width'))
+      width = parseInt(d3.select('.content-container').style('width'));
       
       focus.width(width);
       context.width(width);
@@ -144,6 +148,6 @@ module.exports = function() {
         .call(context);
     }
 
-  })
+  });
 
-}
+};

@@ -1,14 +1,15 @@
 //Adapted from http://bost.ocks.org/mike/chart/time-series-chart.js
+'use strict';
 
 var d3 = require('d3');
 
 function lineChart() {
 
   var margin = {top: 10, right: 10, bottom: 20, left: 40};
-  var width = 960
-  var height = 500
-  var xValue = function(d) { return d[0]; }
-  var yValue = function(d) { return d[1]; }
+  var width = 960;
+  var height = 500;
+  var xValue = function(d) { return d[0]; };
+  var yValue = function(d) { return d[1]; };
   var x = d3.time.scale().range([0, width]);
   var y = d3.scale.linear().range([height, 0]);
   var xScale = d3.time.scale();
@@ -19,7 +20,7 @@ function lineChart() {
   var yPadding = 0.025;
 
   var appendYAxis = false;
-  var yAxis = d3.svg.axis().scale(yScale).orient('left')
+  var yAxis = d3.svg.axis().scale(yScale).orient('left');
 
   var appendDataPoints = false;
 
@@ -46,9 +47,9 @@ function lineChart() {
           .range([0, width - margin.left - margin.right]);
       }
 
-      var yExtent = d3.extent(data, function(d) {return d[1]})
+      var yExtent = d3.extent(data, function(d) {return d[1]; });
       var yMin = yExtent[0] * (1 - yPadding);
-      var yMax = yExtent[1] * (1 + yPadding)
+      var yMax = yExtent[1] * (1 + yPadding);
 
       yScale
         .domain([yMin, yMax])
@@ -84,6 +85,16 @@ function lineChart() {
       g.select('.line')
         .attr('d', line);
 
+      //update the x axis
+      g.select('.x.axis')
+        .attr("transform", "translate(0," + yScale.range()[0] + ")")
+        .call(xAxis);
+
+      //update the y axis
+      if(appendYAxis === true) {
+        g.select('.y.axis')
+          .call(yAxis);        
+      }
 
       //update the data points
       if(appendDataPoints === true) {
@@ -96,25 +107,14 @@ function lineChart() {
           .enter()
           .append('circle')
           .attr('class', 'point')
-          .attr('r', 3.5)
+          .attr('r', 3.5);
 
         g.selectAll('circle.point')
-          .attr('cx', function(d) {return xScale(d[0])})
-          .attr('cy', function(d) {return yScale(d[1])})
+          .attr('cx', function(d) { return xScale(d[0]); })
+          .attr('cy', function(d) { return yScale(d[1]); });
       }
 
-      //update the x axis
-      g.select('.x.axis')
-        .attr("transform", "translate(0," + yScale.range()[0] + ")")
-        .call(xAxis);
-
-      //update the y axis
-      if(appendYAxis === true) {
-        g.select('.y.axis')
-          .call(yAxis);        
-      }
-
-    })
+    });
   }
 
 
@@ -159,41 +159,35 @@ function lineChart() {
     return chart;
   };
 
-  chart.appendBrush = function(_) {
-    if(!arguments.length) return brush;
-    brush = _;
-    return chart;
-  };
-
   chart.appendYAxis = function(_) {
-    if(!arguments.length) return brush;
+    if(!arguments.length) return appendYAxis;
     appendYAxis = _;
     return chart;
   };
 
   chart.appendDataPoints = function(_) {
-    if(!arguments.length) return brush;
+    if(!arguments.length) return appendDataPoints;
     appendDataPoints = _;
     return chart;
-  }
+  };
 
   chart.xScale = function(_) {
     if(!arguments.length) return xScale;
     xScale = _;
     return chart;
-  }
+  };
 
   chart.brushDomain = function(_) {
     if(!arguments.length) return brushDomain;
     brushDomain = _;
     return chart;
-  }
+  };
 
   chart.yPadding = function(_) {
     if(!arguments.length) return yPadding;
     yPadding = _;
     return chart;
-  }
+  };
 
   return chart;
 

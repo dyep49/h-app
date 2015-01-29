@@ -15,7 +15,7 @@ module.exports = function(app) {
   });
 
   router.get('/prices', function(req, res, next) {
-    var query = Price.find().lean().limit(500)
+    var query = Price.find().lean().limit(500);
     query.exec(function(err, prices) {
       if(err)
         next(err);
@@ -25,10 +25,10 @@ module.exports = function(app) {
         newPriceObj.time = price.time.toString();
         newPriceObj.lastPrice = price.lastPrice;
 
-        return newPriceObj
-      })
+        return newPriceObj;
+      });
 
-      var uniquePrices = queryHelper.uniqueByProp(filteredPrices, 'time')
+      var uniquePrices = queryHelper.uniqueByProp(filteredPrices, 'time');
 
       res.json({prices: uniquePrices});
     });

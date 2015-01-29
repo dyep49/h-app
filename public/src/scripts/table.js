@@ -1,3 +1,5 @@
+'use strict';
+
 var d3 = require('d3');
 
 function tabulate() {
@@ -10,19 +12,19 @@ function tabulate() {
     selection.each(function(data) {
 
       //Create array of columns from data keys
-      var columns = []
+      var columns = [];
       var dataSample = data[0];
 
-      for(key in dataSample) {
+      for(var key in dataSample) {
         columns.push(key);
       }
 
       //Create array of data
-      cellData = data.map(function(row) {
+      var cellData = data.map(function(row) {
         return columns.map(function(column) {
-          return {column: column, value: row[column]}
-        })
-      })
+          return {column: column, value: row[column]};
+        });
+      });
 
       //Select the svg element if it exists
       var table = d3.select(this).selectAll('table').data([data]);
@@ -51,17 +53,17 @@ function tabulate() {
       var cells = rows.selectAll('td')
         .data(function(row) {
           return columns.map(function(column) {
-            return {column: column, value: row[column]}
-          })
+            return {column: column, value: row[column]};
+          });
         })
         .enter()
         .append('td')
-        .html(function(d) { return d.value });
-    })
+        .html(function(d) { return d.value; });
+    });
 
   }
 
-  return table
+  return table;
 }
 
 module.exports = tabulate;
