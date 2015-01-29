@@ -73,7 +73,7 @@ function lineChart() {
                 .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
       //Add clip path so data doesn't cross axis
-      svg.enter().append("defs").append("clipPath")
+      svg.append("defs").append("clipPath")
           .attr("id", "clip")
         .append("rect")
           .attr("width", width)
