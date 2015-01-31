@@ -2,8 +2,9 @@
 'use strict';
 
 var d3 = require('d3');
+var b3 = require('./b3.js');
 // var lineChart = require('./linechart.js');
-var lineChart = require('./linechart-refactor');
+var lineChart = require('./linechart.js');
 var tabulate = require('./table.js');
 var io = require('./websockets.js');
 
@@ -13,21 +14,14 @@ module.exports = function() {
 
   var width = parseInt(d3.select('.content-container').style('width'));
 
-  function parsePrice(price) {
-    var parsedPrice = {};
-    parsedPrice.time = new Date(price.time);
-    parsedPrice.price = +price.lastPrice;
-
-    return parsedPrice;
-  }
-
   d3.json('/prices', function(err, data) {
-    data = data.prices.map(parsePrice);
+    data = data.prices.map(b3.parsePrice);
 
     io.on('price', function(price) {
-      var newPrice = parsePrice(price);
+      var newPrice = b3.parsePrice(price);
 
       if(JSON.stringify(newPrice) !== JSON.stringify(data[data.length - 1])) {
+        console.log(newPrice);
         data.push(newPrice);
         update();        
       }
