@@ -2,7 +2,8 @@
 'use strict';
 
 var d3 = require('d3');
-var lineChart = require('./linechart.js');
+// var lineChart = require('./linechart.js');
+var lineChart = require('./linechart-refactor');
 var tabulate = require('./table.js');
 var io = require('./websockets.js');
 

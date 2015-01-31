@@ -33,6 +33,7 @@ function lineChart() {
 
       // Convert data to standard representation greedily;
       // this is needed for nondeterministic accessors.
+      debugger;
       data = data.map(function(d, i) {
         return [xValue.call(data, d, i), yValue.call(data, d, i)];
       });
