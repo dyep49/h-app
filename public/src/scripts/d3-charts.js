@@ -17,6 +17,7 @@ module.exports = function() {
   d3.json('/prices', function(err, data) {
     data = data.prices.map(b3.parsePrice);
 
+    //Update on new price sent via websockets
     io.on('price', function(price) {
       var newPrice = b3.parsePrice(price);
 
@@ -28,6 +29,7 @@ module.exports = function() {
 
     });
 
+    //Create macro chart
     var context = lineChart()    
       .x(function(d) { return d.time; })
       .y(function(d) { return d.price; })
@@ -35,7 +37,7 @@ module.exports = function() {
       .height(100)
       .width(width);
 
-
+    //Create filtered chart
     var focus = lineChart()
       .x(function(d) { return d.time; })
       .y(function(d) { return d.price; })
@@ -44,14 +46,15 @@ module.exports = function() {
       .appendYAxis(true)
       .appendDataPoints(true);
 
-
-    d3.select('#focus')
-      .datum(data)
-      .call(focus);
-
+    //Render macro chart
     d3.select('#context')
       .datum(data)
       .call(context);
+
+    //Render filtered chart
+    d3.select('#focus')
+      .datum(data)
+      .call(focus);
 
     //Adding brush to the context chart
     var brush = d3.svg.brush()
@@ -67,6 +70,7 @@ module.exports = function() {
       .attr("height", context.height() + 7)
       .attr('transform', 'translate(' + context.margin().left + ',0)');
 
+    //Create and append data table
     var dataTable = tabulate();
 
     d3.select('#data-table')
@@ -74,8 +78,7 @@ module.exports = function() {
       .call(dataTable);
 
 
-
-
+    //Filters time data given a date range  
     function filterDataByDateRange(data, extent) {
         var timeMin = extent[0];
         var timeMax = extent[1];
@@ -87,6 +90,7 @@ module.exports = function() {
         });
     }
 
+    //Update charts on brush
     function brushed() {
       var focusDomain;
       var filteredData;
@@ -98,6 +102,11 @@ module.exports = function() {
         focusDomain = d3.extent(data, function(d) {return d.time;});
         filteredData = data;
       } 
+
+      //Clip to prevent overlapping axis
+      d3.selectAll('.line').attr('clip-path', 'url(#clip)')
+      d3.selectAll('circle.point').attr('clip-path', 'url(#clip)')
+
 
       focus.brushDomain(focusDomain);
 
@@ -117,6 +126,7 @@ module.exports = function() {
 
     }
 
+    //Update charts and brush on new data
     function update() {
       var brushExtent = brush.extent();
       brushed();

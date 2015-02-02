@@ -27,7 +27,7 @@ describe('the queryHelper module', function() {
 
       var uniqueData = queryHelper.uniqueByProp(data, 'a');
 
-      JSON.stringify(uniqueData).should.equal(JSON.stringify(unique));
+      uniqueData.should.deep.equal(unique);
     });
   });
 

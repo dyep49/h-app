@@ -25,7 +25,7 @@ function lineChart() {
   var yPadding = 0.025;
 
   //Optional
-  var brushDomain = false;
+  var brushDomain;
   var appendBrush = false;
   var appendYAxis = false;
   var appendDataPoints = false;
@@ -55,7 +55,7 @@ function lineChart() {
   }
 
   function updateXScale() {
-    if(brushDomain === true) {
+    if(brushDomain) {
       xScale
         .domain(brushDomain)
         .range([0, width - margin.left - margin.right]);

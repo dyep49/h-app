@@ -19,13 +19,13 @@ svg {
   fill: none;
   stroke: magenta;
   stroke-width: 1.5px;
-  clip-path: url(#clip);
+  // clip-path: url(#clip);
 
 }
 
 circle.point {
   fill: black;
-  clip-path: url(#clip);
+  // clip-path: url(#clip);
 }
 
 #focus {
