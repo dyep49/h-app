@@ -47,19 +47,19 @@ process.on('SIGTERM', function () {
 
 require('./config/express')(app, config);
 
-Init websockets connection
+// Init websockets connection
 var io = require('socket.io')(server);
+var socket;
 io.on('connection', function(socket) {
-  console.log('Websockets connection established');
-
-  //Start collecting data
-  var collectData = require('./libs/collect-data.js');
-
-  setInterval(function() {
-    collectData().then(function(price) {
-      socket.emit('price', price);
-    });    
-  }, 5000)
+  socket = socket;
 });
 
+//Start collecting data
+var collectData = require('./libs/collect-data.js');
+
+setInterval(function() {
+  collectData().then(function(price) {
+    socket.emit('price', price);
+  });    
+}, 300000)
 
