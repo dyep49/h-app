@@ -5,7 +5,7 @@ var d3 = require('d3');
 var b3 = require('./b3.js');
 var lineChart = require('./linechart.js');
 var tabulate = require('./table.js');
-var io = require('./websockets.js');
+var socket = require('./websockets.js');
 
 module.exports = function() {
 
@@ -14,7 +14,7 @@ module.exports = function() {
   d3.json('/prices', function(err, data) {
     data = data.prices.reverse().map(b3.parsePrice);
     //Update on new price sent via websockets
-    io.on('new-price', function(price) {
+    socket.on('new', function(price) {
       var newPrice = b3.parsePrice(price);
       if(JSON.stringify(newPrice) !== JSON.stringify(data[data.length - 1])) {
         data.push(newPrice);

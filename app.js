@@ -49,9 +49,10 @@ require('./config/express')(app, config);
 
 // Init websockets connection
 var io = require('socket.io')(server);
-var socket;
+var webSocket
+
 io.on('connection', function(socket) {
-  socket = socket;
+  webSocket = socket;
 });
 
 //Start collecting data
@@ -59,9 +60,7 @@ var collectData = require('./libs/collect-data.js');
 
 setInterval(function() {
   collectData().then(function(price) {
-    if(socket) {
-      socket.emit('new-price', price);    
-    }
+    webSocket.emit('new', price);    
   });    
-}, 300000)
+}, 5000)
 
