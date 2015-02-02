@@ -2,7 +2,7 @@ var apiRequest = require('../../../libs/api-request.js');
 
 describe('the apiRequest module', function() {
 
-  it('exports a factory', function() {
+  it('exports an object', function() {
     var empty = Object.keys(apiRequest).length === 0 ? true : false;
     empty.should.equal(false);
   });

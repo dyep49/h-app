@@ -3,7 +3,7 @@ var queryHelper = require('../../../libs/query-helper.js');
 
 describe('the queryHelper module', function() {
 
-  it('exports a factory', function() {
+  it('exports an object', function() {
     var empty = Object.keys(queryHelper).length === 0 ? true : false;
     empty.should.equal(false);
   });

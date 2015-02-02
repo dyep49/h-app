@@ -84,7 +84,10 @@ function lineChart() {
     gEnter = svg.enter().append('svg').append('g');
     gEnter.append('path').attr('class', 'line');
     gEnter.append('g').attr('class', 'x axis');
-    gEnter.append('g').attr('class', 'y axis');
+
+    if(appendYAxis === true) {
+      gEnter.append('g').attr('class', 'y axis');   
+    }
   }
 
   function updateDimensions() {
