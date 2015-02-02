@@ -3,26 +3,21 @@
 
 var d3 = require('d3');
 var b3 = require('./b3.js');
-// var lineChart = require('./linechart.js');
 var lineChart = require('./linechart.js');
 var tabulate = require('./table.js');
 var io = require('./websockets.js');
-
-
 
 module.exports = function() {
 
   var width = parseInt(d3.select('.content-container').style('width'));
 
   d3.json('/prices', function(err, data) {
-    data = data.prices.map(b3.parsePrice);
-
+    data = data.prices.reverse().map(b3.parsePrice);
     //Update on new price sent via websockets
     io.on('price', function(price) {
       var newPrice = b3.parsePrice(price);
 
       if(JSON.stringify(newPrice) !== JSON.stringify(data[data.length - 1])) {
-        console.log(newPrice);
         data.push(newPrice);
         update();        
       }
@@ -78,18 +73,6 @@ module.exports = function() {
       .call(dataTable);
 
 
-    //Filters time data given a date range  
-    function filterDataByDateRange(data, extent) {
-        var timeMin = extent[0];
-        var timeMax = extent[1];
-
-        return data.filter(function(datum) {
-          var timeMin = brush.extent()[0];
-          var timeMax = brush.extent()[1];
-          return datum.time >= timeMin && datum.time <= timeMax;
-        });
-    }
-
     //Update charts on brush
     function brushed() {
       var focusDomain;
@@ -97,15 +80,15 @@ module.exports = function() {
 
       if(!brush.empty()) {
         focusDomain = brush.extent();
-        filteredData = filterDataByDateRange(data, focusDomain);
+        filteredData = b3.filterDataByDateRange(data, focusDomain);
       } else {
         focusDomain = d3.extent(data, function(d) {return d.time;});
         filteredData = data;
       } 
 
       //Clip to prevent overlapping axis
-      d3.selectAll('.line').attr('clip-path', 'url(#clip)')
-      d3.selectAll('circle.point').attr('clip-path', 'url(#clip)')
+      d3.selectAll('.line').attr('clip-path', 'url(#clip)');
+      d3.selectAll('circle.point').attr('clip-path', 'url(#clip)');
 
 
       focus.brushDomain(focusDomain);

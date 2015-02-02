@@ -15,7 +15,7 @@ module.exports = function(app) {
   });
 
   router.get('/prices', function(req, res, next) {
-    var query = Price.find().lean().limit(500);
+    var query = Price.find().sort({time:-1}).lean().limit(3000);
     query.exec(function(err, prices) {
       if(err)
         next(err);

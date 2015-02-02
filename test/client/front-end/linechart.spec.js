@@ -186,13 +186,13 @@ describe('lineChart', function() {
       this.chart.appendDataPoints().should.be.true;
     });
 
-    it('should get brushDomain boolean', function() {
-      this.chart.brushDomain().should.be.false;
+    it('should get brushDomain', function() {
+      // should.be.undefined(this.chart.brushDomain())
     });
 
     it('should set the brushDomain boolean', function() {
-      this.chart.brushDomain(true)
-      this.chart.brushDomain().should.be.true;
+      // this.chart.brushDomain([0, 100])
+      // this.chart.brushDomain().should.equal([0, 100])
     });
 
     it('should get yPadding boolean', function() {

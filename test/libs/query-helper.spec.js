@@ -1,5 +1,4 @@
-var config = require('../../../config/config.js');
-var queryHelper = require('../../../libs/query-helper.js');
+var queryHelper = require('../../libs/query-helper.js');
 
 describe('the queryHelper module', function() {
 

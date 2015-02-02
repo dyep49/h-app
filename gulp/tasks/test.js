@@ -4,7 +4,7 @@ var cover = require('gulp-coverage');
 
 module.exports = function() {
   gulp.task('test', function() {
-    return gulp.src(['./test/spec/**/*.spec.js', '!./test/spec/**/client/*.spec.js'], {
+    return gulp.src(['./test/**/*.spec.js', '!./test/client/front-end/*'], {
       read: false,
       globals: {
         COMMON_MODULE: require('./../../test/spec_helper.js')()

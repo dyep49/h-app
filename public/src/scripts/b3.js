@@ -8,7 +8,16 @@ var b3 = {
     parsedPrice.price = +price.lastPrice;
 
     return parsedPrice;
+  },
+
+  filterDataByDateRange: function(data, extent) {
+    var timeMin = extent[0];
+    var timeMax = extent[1];
+
+    return data.filter(function(datum) {
+      return new Date(datum.time) >= timeMin && new Date(datum.time) <= timeMax;
+    });
   }
-}
+};
 
 module.exports = b3;

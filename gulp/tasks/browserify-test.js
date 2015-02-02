@@ -8,7 +8,7 @@ var size = require('gulp-size');
 module.exports = function() {
   gulp.task('browserify-test', function() {
     var opts = {
-      entries: ['./test/spec/client/index.js'],
+      entries: ['./test/client/front-end/index.js'],
       debug: true
     }
 
@@ -17,8 +17,8 @@ module.exports = function() {
     return bundle
       .bundle()
       .pipe(source('client-test.js'))
-      // .pipe((gStreamify(uglify())))
-      .pipe(gulp.dest('./test/spec/client/build'))
+      .pipe((gStreamify(uglify())))
+      .pipe(gulp.dest('./test/client/front-end/build'))
       .pipe((gStreamify(size())))
       
   })

@@ -1,8 +1,8 @@
-var config = require('../../../config/config.js');
-var Price = require('../../../app/models/price.js');
+var config = require('../../config/config.js');
+var Price = require('../../app/models/price.js');
 var mongoose = require('mongoose');
 
-var collectData = require('../../../libs/collect-data.js');
+var collectData = require('../../libs/collect-data.js');
 
 
 describe('#savePrice', function() {

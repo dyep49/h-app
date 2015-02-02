@@ -1,4 +1,13 @@
 .content-container {
   width: 100%;
   max-width: 970px;
+  margin: 0 auto;
+
+  .title {
+    text-align: center;
+  }
+
+  .call-to-action {
+    text-align: right;
+  }
 }

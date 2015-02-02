@@ -1,5 +1,5 @@
-var config = require('../../../config/config.js');
-var Price = require('../../../app/models/price.js');
+var config = require('../../config/config.js');
+var Price = require('../../app/models/price.js');
 
 var mongoose = require('mongoose');
 

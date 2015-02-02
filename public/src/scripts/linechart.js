@@ -7,7 +7,7 @@ function lineChart() {
   var svg;
   var gEnter;
   var g;
-  var data = []
+  var data = [];
 
   //Default config
   var margin = {top: 10, right: 10, bottom: 20, left: 40};
@@ -46,12 +46,12 @@ function lineChart() {
       updateLine();
       updateXAxis();
 
-      if(appendYAxis === true) { updateYAxis(); };
-      if(appendDataPoints === true) { updateDataPoints(); };
+      if(appendYAxis === true) { updateYAxis(); }
+      if(appendDataPoints === true) { updateDataPoints(); }
 
       appendClip();
 
-    })
+    });
   }
 
   function updateXScale() {
@@ -98,7 +98,7 @@ function lineChart() {
 
     //update the inner dimensions
     g = svg.select('g')
-          .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+          .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
   }
 
   function appendClip() {
@@ -156,8 +156,8 @@ function lineChart() {
   chart.margin = function(_) {
     if(!arguments.length) return margin;
     margin = _;
-    return this
-  }
+    return this;
+  };
 
   chart.width = function(_) {
     if (!arguments.length) return width;

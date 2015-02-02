@@ -1,4 +1,4 @@
-var apiRequest = require('../../../libs/api-request.js');
+var apiRequest = require('../../libs/api-request.js');
 
 describe('the apiRequest module', function() {
 

@@ -3,9 +3,6 @@ var Price = mongoose.model('Price');
 var apiRequest = require('./api-request.js');
 var Q = require('q');
 
-
-
-
 function savePrice() {
   var deferred = Q.defer();
   var bitstampEndpoint = 'https://www.bitstamp.net/api/ticker/';
