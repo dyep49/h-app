@@ -11,6 +11,8 @@ module.exports = function() {
 
   var width = parseInt(d3.select('.content-container').style('width'));
 
+  console.log('will this work????')
+
   d3.json('/prices', function(err, data) {
     data = data.prices.reverse().map(b3.parsePrice);
     //Update on new price sent via websockets

@@ -50,6 +50,7 @@
     "jshint-stylish": "~1.0.0",
     "vinyl-source-stream": "~1.0.0",
     "gulp-mocha-phantomjs": "~0.5.3",
-    "sinon": "~1.12.2"
+    "sinon": "~1.12.2",
+    "sinon-chai": "~2.6.0"
   }
 }
