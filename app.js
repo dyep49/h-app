@@ -47,7 +47,7 @@ process.on('SIGTERM', function () {
 
 require('./config/express')(app, config);
 
-//Init websockets connection
+Init websockets connection
 var io = require('socket.io')(server);
 io.on('connection', function(socket) {
   console.log('Websockets connection established');

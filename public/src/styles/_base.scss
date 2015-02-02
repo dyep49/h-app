@@ -5,6 +5,25 @@
 
   .title {
     text-align: center;
+    display: inline-block;
+  }
+
+  .title-container {
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .sockets {
+    display: inline;
+    float: right;
+  }
+
+  .websockets-disconnect {
+    color: red;
+  }
+
+  .websockets-connect {
+    color: green;
   }
 
   .call-to-action {
