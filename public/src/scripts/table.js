@@ -36,6 +36,7 @@ function tabulate() {
 
       //Append header row
       thead.append('tr')
+        .attr('class', 'header-row')
         .selectAll('th')
         .data(columns)
         .enter()

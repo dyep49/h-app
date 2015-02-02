@@ -20,14 +20,14 @@ function lineChart() {
   var xScale = d3.time.scale();
   var yScale = d3.scale.linear();
   var xAxis = d3.svg.axis().scale(xScale).orient('bottom');
+  var yAxis = d3.svg.axis().scale(yScale).orient('left');
   var line = d3.svg.line().x(X).y(Y);
   var yPadding = 0.025;
 
   //Optional
-  var brushDomain;
+  var brushDomain = false;
   var appendBrush = false;
   var appendYAxis = false;
-  var yAxis = d3.svg.axis().scale(yScale).orient('left');
   var appendDataPoints = false;
 
   function chart(selection) {
@@ -55,7 +55,7 @@ function lineChart() {
   }
 
   function updateXScale() {
-    if(brushDomain) {
+    if(brushDomain === true) {
       xScale
         .domain(brushDomain)
         .range([0, width - margin.left - margin.right]);
