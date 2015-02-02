@@ -14,9 +14,9 @@ module.exports = function() {
   d3.json('/prices', function(err, data) {
     data = data.prices.reverse().map(b3.parsePrice);
     //Update on new price sent via websockets
-    io.on('price', function(price) {
+    io.on('new-price', function(price) {
       var newPrice = b3.parsePrice(price);
-
+      console.log(newPrice);
       if(JSON.stringify(newPrice) !== JSON.stringify(data[data.length - 1])) {
         data.push(newPrice);
         update();        

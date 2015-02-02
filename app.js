@@ -60,7 +60,7 @@ var collectData = require('./libs/collect-data.js');
 setInterval(function() {
   collectData().then(function(price) {
     if(socket) {
-      socket.emit('price', price);    
+      socket.emit('new-price', price);    
     }
   });    
 }, 300000)

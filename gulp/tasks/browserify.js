@@ -10,7 +10,7 @@ var reload = require('browser-sync').reload;
 module.exports = function() {
   gulp.task('browserify', function() {
     var opts = {
-      entries: ['./public/src/scripts/home.js'],
+      entries: ['./public/src/scripts/index.js'],
       debug: true
     }
 
@@ -23,7 +23,7 @@ module.exports = function() {
     return bundle
       .bundle()
       .pipe(source('app.js'))
-      .pipe((gStreamify(uglify())))
+      // .pipe((gStreamify(uglify())))
       .pipe(gulp.dest('./public/build/scripts'))
       .pipe(reload({stream: true}))
       .pipe((gStreamify(size())))
