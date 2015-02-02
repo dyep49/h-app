@@ -1,5 +1,5 @@
 var io = require('socket.io-client');
-var port = process.env.NODE_ENV === 'production' ? '/' : 'http://localhost:4000';
+var port = process.env.NODE_ENV === 'production' ? 'http://localhost' : 'http://localhost:4000';
 var socket = io.connect(port);
 
 socket.on('connect', function() {
