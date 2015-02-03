@@ -1,5 +1,6 @@
 var io = require('socket.io-client');
-var socket = io.connect('/');
+var host = location.origin.replace(/^http/, 'ws')
+var socket = io.connect(host);
 
 socket.on('connect', function() {
   document.querySelector('.websockets-connect').style.display = 'inline';
