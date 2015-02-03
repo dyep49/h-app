@@ -49,6 +49,11 @@ require('./config/express')(app, config);
 
 // Init websockets connection
 var io = require('socket.io')(server);
+
+io.set("transports", ["xhr-polling"]); 
+// io.set("polling duration", 10); 
+
+
 var webSocket
 
 io.on('connection', function(socket) {
