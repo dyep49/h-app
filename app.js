@@ -48,9 +48,12 @@ process.on('SIGTERM', function () {
 require('./config/express')(app, config);
 
 // Init websockets connection
-var io = require('socket.io')(server);
+var io = require('socket.io')(server, {
+  'polling duration': 10,
+  'transports': ['polling']
+});
 
-io.set("transports", ["xhr-polling"]); 
+// io.set("transports", ["xhr-polling"]); 
 // io.set("polling duration", 10); 
 
 
