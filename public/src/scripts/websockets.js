@@ -1,6 +1,5 @@
 var io = require('socket.io-client');
-var port = 'http://localhost:3000';
-var socket = io.connect(port);
+var socket = io.connect('/');
 
 socket.on('connect', function() {
   document.querySelector('.websockets-connect').style.display = 'inline';
