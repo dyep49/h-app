@@ -62,5 +62,5 @@ setInterval(function() {
   collectData().then(function(price) {
     webSocket.emit('new', price);    
   });    
-}, 300000)
+}, 1200000)
 
